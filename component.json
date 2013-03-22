@@ -7,8 +7,8 @@
     "x-tag"
   ],
   "main": [
-    "src/main.js",
-    "src/main.css"
+    "src/light.css",
+    "src/dark.css"
   ],
   "dependencies": {
     "x-tag-core": "*"
