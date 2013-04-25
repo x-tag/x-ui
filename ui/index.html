@@ -1,23 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-      <meta charset="utf-8" />
-      <title>X-UI - X-Tag UI Toolkit</title>
-      <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
-    <link rel="stylesheet" type="text/css" href="../src/light.css"/>
+	<head>
+		<meta charset="utf-8" />
+		<title>X-UI - The X-Tag UI Toolkit</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="../src/images/shortcut.png" rel="shortcut icon" type="image/x-icon" />
+		
+		<link rel="stylesheet" type="text/css" href="site.css"/>
+		
+		<link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+		<link rel="stylesheet" type="text/css" href="../x-ribbon/x-ribbon.css"/>
+		<link rel="stylesheet" type="text/css" href="../x-input/x-input.css"/>
+		<link rel="stylesheet" type="text/css" href="../x-toggle/x-toggle.css"/>
+		
+		<link rel="stylesheet" type="text/css" href="elements.css"/>
+		
+		<script type="text/javascript" src="x-tag-components.js"></script>
+		<script type="text/javascript" src="../x-input/x-input.js"></script>
+		<script type="text/javascript" src="../x-toggle/x-toggle.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="../src/light.css"/>
+		
+		<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet" type="text/css" />
+	</head>
 
-      <script type="text/javascript" src="x-tag-components.js"></script>
-    <style>
+<body>
+	
+	<header id="header">
+		<h1 id="nav_logo">
+			<span>&lt;</span>
+			<div>x<span>&dash;<span>UI</span></span></div>
+			<span>&gt;</span>
+		</h1>
+	</header>
 
-    </style>
-  </head>
+	<h2 id="tagline">The X-Tag UI Toolkit & Style Guide</h2>
+	
+	<ul id="element_groups">
+		<li>
+		
+			<section id="text_styles">
+				<header>Font & Text</header>
+				
+				<x-ribbon><h4>Font Family</h4></x-ribbon>
+				
+				<div>
+					<h2>X-UI uses Noto Sans</h2>
+					<p>Noto Sans is a free web font included with X-UI. For further detail, take a look at Noto Sans on <a href="http://www.google.com/fonts/#ReviewPlace:refine/Collection:Noto+Sans">Google Fonts</a>.</p>
+				</div>
+				
+				<x-ribbon><h4>Headings</h4></x-ribbon>
+				<div>
+					<h1>Heading 1</h1>
+					<h2>Heading 2</h2>
+					<h3>Heading 3</h3>
+					<h4>Heading 4</h4>
+				</div>
+					
+					
+				<x-ribbon><h4>Text Content</h4></x-ribbon>
+				<div>
+					<p>
+						<p>How long can we maintain? I wonder.</p>
+						<p>How long before one of us starts raving and jabbering at this boy? What will he think then? 
+						This same lonely desert was the last known home of the Manson family. Will he make that grim connection...</p>
+						<p>No point mentioning those <a href="http://en.wikipedia.org/wiki/Bat">bats</a>, I thought. The poor bastard will see them soon enough.
+						The car suddenly veered off the road and we came to a sliding halt in the gravel. I was hurled against the dashboard. 
+						My attorney was slumped over the wheel.</p>
+						<p>"What's wrong?" I yelled. <blockquote>"We can't stop here. <em>This is bat country!</em>"</blockquote></p>
+					</p>
+				</div>
+				
+			</section>
+		
+		</li>
+		
+		<li>
+		
+			<section id="form_elements">
+				<header>Form Elements</header>
+				
+				<x-ribbon><h4>Buttons</h4></x-ribbon>
+				<div>
+					<button>Default</button>
+					<button class="confirm">Confirm</button>
+					<button class="cancel">Cancel</button>
+					<button disabled>Disabled</button>
+				</div>
+					
+					
+				<x-ribbon><h4>Text Input</h4></x-ribbon>
+				<div>
+					<input type="text" value="Inactive"/>	
+					<input class="valid" type="text" value="Valid"/>
+					<input class="error" type="text" value="Error"/>
+					<input disabled type="text" value="Disabled"/>
+				</div>
+				
+				
+				<div>
+					<h4>X-Input</h4>
+					<x-input value="Slicker than your average input" data-loading><button data-clear>&#10799;</button></x-input>	
+				</div>
+				
+				<x-ribbon><h4>X-Toggle</h4></x-ribbon>
+				<div>
+					<x-toggle label="Check 1" name="toggle-check-1" checked></x-toggle>
+					<x-toggle label="Check 2" name="toggle-check-2"></x-toggle>
+					<br/>
+					<x-toggle label="Radio 1" name="toggle-group-1" checked></x-toggle>
+					<x-toggle label="Radio 2" name="toggle-group-1"></x-toggle>
+					<x-toggle label="Radio 3" name="toggle-group-1"></x-toggle>
+				</div>
+				
+				<div></div>
+				
+			</section>
+		
+		</li>
+		
+	</ul>
 
-  <body>
-
-
-
-
-  </body>
+</body>
 
 </html>

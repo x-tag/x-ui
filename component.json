@@ -11,6 +11,7 @@
     "src/dark.css"
   ],
   "dependencies": {
-    "x-tag-core": "*"
+    "x-tag-core": "*",
+	"x-tag-slidebox": "*"
   }
 }

@@ -1,0 +1,28 @@
+
+x-ribbon {
+	position: relative;
+    display: block;
+    float: left;
+    margin: 16px 100% 0 -10px;
+    padding: 4px 10px;
+    background: #666666;
+	color: #fff;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+x-ribbon h1, x-ribbon h2, x-ribbon h3, x-ribbon h4, x-ribbon h5, x-ribbon h6 {
+	margin: 0;
+}
+
+x-ribbon:after {
+    content: " ";
+    display: block;
+    height: 0;
+    left: 0;
+    position: absolute;
+    top: 100%;
+    width: 0;
+	border-left: 10px solid transparent;
+    border-top: 10px solid #333;
+}

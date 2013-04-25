@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		
+		<title>Actionbar Demo - X-Tag</title>
+		
+		<link rel="stylesheet" type="text/css" href="../x-actionbar.css"/>		
+		<script type="text/javascript" src="https://rawgithub.com/mozilla/web-components/master/src/document.register.js"></script>		
+		<!-- <script type="text/javascript" src="http://rawgithub.com/x-tag/core/master/src/core.js"></script> -->
+		<script type="text/javascript" src="../../../x-tag-core/src/core.js"></script>
+		<script type="text/javascript" src="../x-actionbar.js"></script>	
+			
+		<style type="text/css">
+			
+			
+			body {
+				padding: 0;
+				margin: 0;
+				background: url(bg.png);
+				font-family: Arial;
+			}
+			
+			header {
+				padding: 6px;
+				background: -webkit-linear-gradient(top, #f0f0f0, #aaa);
+				background: -moz-linear-gradient(top, #f0f0f0, #aaa);
+				background: -ms-linear-gradient(top, #f0f0f0, #aaa);
+				background: -o-linear-gradient(top, #f0f0f0, #aaa);
+				background: linear-gradient(top, #f0f0f0, #aaa);
+				box-shadow: 0 1px 3px 0px rgba(0,0,0,0.7);
+			}
+			
+			li {
+				min-width: 30px;
+				margin: 3px;
+				cursor: pointer;
+			}
+			
+		</style>
+	</head>
+
+<body>
+	<header>
+		<label for="foo">Foo Input</label>
+		<x-input name="foo"></x-input>
+	</header>
+</body>
+
+<script type="text/javascript">
+
+	document.addEventListener('DOMComponentsLoaded', function(){
+		
+		
+		
+	}, false);
+	
+	xtag.pseudos.foo = {
+		action: function(event, pseudo){
+			console.log(this, pseudo);
+		}
+	}
+	
+	xtag.addEvent(document.body, 'tap:delegate(li):foo(bar)', function(){
+		console.log(this.innerHTML);
+	});
+
+</script>
+
+</html>
