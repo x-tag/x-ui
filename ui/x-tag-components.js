@@ -11,31 +11,44 @@ if (!(document.register || {}).__polyfill__){
       mutation = win.MutationObserver || win.WebKitMutationObserver ||  win.MozMutationObserver,
       _createElement = doc.createElement,
       register = function(name, options){
-        if (!tags[name]) tokens.push(name);
-        options = options || {};
+        name = name.toLowerCase();
+        var base,
+            token = name,
+            options = options || {};
+            
+        if (!options.prototype) {
+          throw new Error('Missing required prototype property for registration of the ' + name + ' element');
+        }
+        
         if (options.prototype && !('setAttribute' in options.prototype)) {
           throw new TypeError("Unexpected prototype for " + name + " element - custom element prototypes must inherit from the Element interface");
         }
-        var _prototype = options.prototype || Object.create((win.HTMLSpanElement || win.HTMLElement).prototype),
-            lifecycle = options.lifecycle || {},
-            tag = tags[name] = {
+        
+        if (options.extends){
+          var ancestor = (tags[options.extends] || _createElement.call(doc, options.extends)).constructor;
+          if (ancestor != (win.HTMLUnknownElement || win.HTMLElement)) {
+            base = options.extends;
+            token = '[is="' + name + '"]';
+          }
+        }
+        
+        tokens.push(token);
+        
+        var tag = tags[name] = {
+              base: base,
               'constructor': function(){
                 return doc.createElement(name);
               },
-              _prototype: doc.__proto__ ? null : unwrapPrototype(_prototype),
-              'prototype': _prototype,
-              'fragment': options.fragment || doc.createDocumentFragment(),
-              'lifecycle': {
-                created: lifecycle.created || function(){},
-                removed: lifecycle.removed || function(){},
-                inserted: lifecycle.inserted || function(){},
-                attributeChanged: lifecycle.attributeChanged || function(){}
-              }
+              _prototype: doc.__proto__ ? null : unwrapPrototype(options.prototype),
+              'prototype': options.prototype
             };
+        
         tag.constructor.prototype = tag.prototype;
+        
         if (domready) query(doc, name).forEach(function(element){
           upgrade(element, true);
         });
+        
         return tag.constructor;
       };
     
@@ -80,7 +93,7 @@ if (!(document.register || {}).__polyfill__){
     }
     
     function getTag(element){
-      return element.nodeName ? tags[element.nodeName.toLowerCase()] : false;
+      return element.getAttribute ? tags[element.getAttribute('is') || element.nodeName.toLowerCase()] : false;
     }
     
     function manipulate(element, fn){
@@ -96,33 +109,15 @@ if (!(document.register || {}).__polyfill__){
       }
     }
     
-    function upgrade(element, replace){
-      if (!element._elementupgraded && !element._suppressObservers) {
+    function upgrade(element){
+      if (!element._elementupgraded) {
         var tag = getTag(element);
         if (tag) {
-          var upgraded = element;
-          if (replace) {
-            element._suppressObservers = true;
-            manipulate(element, function(){
-              upgraded = _createElement.call(doc, element.nodeName);
-              upgraded._suppressObservers = true;
-              while (element.firstChild) upgraded.appendChild(element.firstChild);
-              var index = element.attributes.length;
-              while (index--) {
-                var attr = element.attributes[index];
-                _setAttribute.call(upgraded, attr.name, attr.value);
-              }
-              return upgraded;
-            });
-          }
-          if (doc.__proto__) upgraded.__proto__ = tag.prototype;
-          else Object.defineProperties(upgraded, tag._prototype);
-          upgraded.constructor = tag.constructor;
-          upgraded._elementupgraded = true;
-          if (!mutation) delete upgraded._suppressObservers;
-          tag.lifecycle.created.call(upgraded, tag.prototype);
-          if (replace) fireEvent(element, 'elementreplace', { upgrade: upgraded }, { bubbles: false });
-          fireEvent(upgraded, 'elementupgrade');
+          if (doc.__proto__) element.__proto__ = tag.prototype;
+          else Object.defineProperties(element, tag._prototype);
+          element.constructor = tag.constructor;
+          element._elementupgraded = true;
+          if (element.readyCallback) element.readyCallback.call(element, tag.prototype);
         }
       }
     }
@@ -130,14 +125,10 @@ if (!(document.register || {}).__polyfill__){
     function inserted(element, event){
       var tag = getTag(element);
       if (tag){
-        if (!element._elementupgraded) upgrade(element, true);
+        if (!element._elementupgraded) upgrade(element);
         else {
-          if (element._suppressObservers) {
-            delete element._suppressObservers;
-            return element;
-          }
-          if (!element._suppressObservers && doc.documentElement.contains(element)) {
-            tag.lifecycle.inserted.call(element);
+          if (doc.documentElement.contains(element) && element.insertedCallback) {
+            element.insertedCallback.call(element);
           }
           insertChildren(element);
         }
@@ -147,20 +138,17 @@ if (!(document.register || {}).__polyfill__){
 
     function insertChildren(element){
       if (element.childNodes.length) query(element, tokens).forEach(function(el){
-        if (!el._elementupgraded) upgrade(el, true);
-        getTag(el).lifecycle.inserted.call(el);
+        if (!el._elementupgraded) upgrade(el);
+        if (el.insertedCallback) el.insertedCallback.call(el);
       });
     }
     
     function removed(element){
       if (element._elementupgraded) {
-        if (element._suppressObservers) delete element._suppressObservers;
-        else {
-          getTag(element).lifecycle.removed.call(element);
-          if (element.childNodes.length) query(element, tokens).forEach(function(el){
-            removed(el);
-          });
-        }
+        if (element.removedCallback) element.removedCallback.call(element);
+        if (element.childNodes.length) query(element, tokens).forEach(function(el){
+          removed(el);
+        });
       }
     }
     
@@ -230,7 +218,9 @@ if (!(document.register || {}).__polyfill__){
       doc.register = register;
       
       doc.createElement = function createElement(tag){
-        var element = _createElement.call(doc, tag);
+        var base = tags[tag] ? tags[tag].base : null;
+            element = _createElement.call(doc, base || tag);
+        if (base) element.setAttribute('is', tag);
         upgrade(element);
         return element;
       };
@@ -241,7 +231,7 @@ if (!(document.register || {}).__polyfill__){
             last = this.getAttribute(attr);
         _setAttribute.call(this, attr, value);
         if (tag && last != this.getAttribute(attr)) {
-          tag.lifecycle.attributeChanged.call(this, attr, value, last, skip);
+          if (this.attributeChangedCallback) this.attributeChangedCallback.call(this, attr, value, last, skip);
         } 
       };
       
@@ -250,10 +240,11 @@ if (!(document.register || {}).__polyfill__){
         addObserver(doc.documentElement, 'removed', removed);
         
         if (tokens.length) query(doc, tokens).forEach(function(element){
-          upgrade(element, true);
+          upgrade(element);
         });
         
         domready = true;
+        fireEvent(doc, 'WebComponentsReady');
         fireEvent(doc, 'DOMComponentsLoaded');
         fireEvent(doc, '__DOMComponentsLoaded__');
       };
@@ -317,14 +308,13 @@ if (!(document.register || {}).__polyfill__){
     },
     prefix = (function () {
       var styles = win.getComputedStyle(doc.documentElement, ''),
-        pre = (Array.prototype.slice
-          .call(styles)
-          .join('') 
-          .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
-        )[1],
-        dom = ('WebKit|Moz|MS|O').match(new RegExp('(' + pre + ')', 'i'))[1];
+          pre = (Array.prototype.slice
+            .call(styles)
+            .join('') 
+            .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
+          )[1];
       return {
-        dom: dom,
+        dom: pre == 'ms' ? pre.toUpperCase() : pre,
         lowercase: pre,
         css: '-' + pre + '-',
         js: pre[0].toUpperCase() + pre.substr(1)
@@ -411,31 +401,38 @@ if (!(document.register || {}).__polyfill__){
       }
   
       var attributeChanged = tag.lifecycle.attributeChanged;
-      tag.lifecycle.attributeChanged = function (attr, value, last, skip) {
-        var setter = xtag.attributeSetters[_name][attr.toLowerCase()];
-        if (!skip && setter) this[setter] = value;
-        return attributeChanged ? attributeChanged.apply(this, xtag.toArray(arguments)) : null;
-      };
+      tag.prototype.attributeChangedCallback = {
+        value: function(attr, value, last, skip){
+          var setter = xtag.attributeSetters[_name][attr.toLowerCase()];
+          if (!skip && setter) this[setter] = value;
+          return attributeChanged ? attributeChanged.apply(this, xtag.toArray(arguments)) : null;
+        }
+       };
 
-      var created = tag.lifecycle.created;
-      tag.lifecycle.created = function () {
-        var element = this;
-        tag.pseudos.forEach(function(obj){
-          obj.onAdd.call(element, obj);
-        });
-        xtag.addEvents(this, tag.events);
-        tag.mixins.forEach(function(mixin){
-          if (xtag.mixins[mixin].events) xtag.addEvents(element, xtag.mixins[mixin].events);
-        });
-        return created ? created.apply(this, xtag.toArray(arguments)) : null;
+      var ready = tag.lifecycle.created || tag.lifecycle.ready;
+      tag.prototype.readyCallback = {
+        value: function(){
+          var element = this;
+          tag.pseudos.forEach(function(obj){
+            obj.onAdd.call(element, obj);
+          });
+          xtag.addEvents(this, tag.events);
+          tag.mixins.forEach(function(mixin){
+            if (xtag.mixins[mixin].events) xtag.addEvents(element, xtag.mixins[mixin].events);
+          });
+          return ready ? ready.apply(this, xtag.toArray(arguments)) : null;
+        }
       };
       
-      var proto = doc.register(_name, {
-        'prototype': 'nodeName' in tag.prototype ? tag.prototype : Object.create((win.HTMLSpanElement || win.HTMLElement).prototype, tag.prototype),
-        'lifecycle':  tag.lifecycle
+      if (tag.lifecycle.inserted) tag.prototype.insertedCallback = { value: tag.lifecycle.inserted };
+      if (tag.lifecycle.removed) tag.prototype.removedCallback = { value: tag.lifecycle.removed };
+      
+      var constructor = doc.register(_name, {
+        'extends': options.extends,
+        'prototype': Object.create((options.extends ? document.createElement(options.extends).constructor : win.HTMLElement).prototype, tag.prototype)
       });
       
-      return proto;
+      return constructor;
     },
 
   /*** Exposed Variables ***/
@@ -726,99 +723,83 @@ if (!(document.register || {}).__polyfill__){
 
 })();
 
+(function() {
 
-(function(){
+  var changeFlipDirection = function(elem, dir) {
+    var current = elem.className.match(/x-flip-direction-\w+/);
+    if (current) xtag.removeClass(elem, current[0]);
+    xtag.addClass(elem, 'x-flip-direction-' + dir);
+  };
 
-  var transform = xtag.prefix.js + 'Transform';
-  function getState(el){
-    var selected = xtag.query(el, 'x-slides > x-slide[selected]')[0] || 0;
-    return [selected ? xtag.query(el, 'x-slides > x-slide').indexOf(selected) : selected, el.firstElementChild.children.length - 1];
-  }
-
-  function slide(el, index){
-    var slides = xtag.toArray(el.firstElementChild.children);
-    slides.forEach(function(slide){ slide.removeAttribute('selected'); });
-    slides[index || 0].setAttribute('selected', null);
-    el.firstElementChild.style[transform] = 'translate'+ (el.getAttribute('orientation') || 'x') + '(' + (index || 0) * (-100 / slides.length) + '%)';
-  }
-
-  function init(toSelected){    
-    var slides = this.firstElementChild;
-    if (!slides || !slides.children.length || slides.tagName.toLowerCase() != 'x-slides') return;
-    
-    var children = xtag.toArray(slides.children),
-      size = 100 / (children.length || 1),
-      orient = this.getAttribute('orientation') || 'x',
-      style = orient == 'x' ? ['width', 'height'] : ['height', 'width'];
-    
-    slides.style[style[1]] =  '100%';
-    slides.style[style[0]] = children.length * 100 + '%';
-    slides.style[transform] = 'translate' + orient + '(0%)';
-    children.forEach(function(slide){       
-      slide.style[style[0]] = size + '%';
-      slide.style[style[1]] = '100%';
-    });    
-    
-    if (toSelected) {
-      var selected = slides.querySelector('[selected]');
-      if (selected) slide(this, children.indexOf(selected) || 0);
-    }
-  }
-
-  xtag.register('x-slidebox', {
-    events:{
-      'transitionend': function(e){
-        if (e.target == this) xtag.fireEvent(this, 'slideend');
-      },
-      'elementupgrade': function(e){
-        if (e.target == this){
-          init();
-        }
+  xtag.register('x-flipbox', {
+    lifecycle: {
+      created: function() {
+        xtag.addClass(this, 'x-flip-direction-right');
       }
     },
-    accessors:{
-      orientation:{
-        get: function(){
-          return this.getAttribute('orientation');
+    events:{
+      'transitionend': function(e) {
+        if (e.target == this) xtag.fireEvent(this, 'flipend');
+      }
+    },
+    accessors: {
+      flipDirection: {
+        get: function() {
+          var current = this.className.match(/x-flip-direction-(\w+)/);
+          return current[1];
+
         },
-        set: function(value){
-          this.setAttribute('orientation', value.toLowerCase());
-          init.call(this, true);
+        set: function(value) {
+          if (xtag.hasClass(this ,'x-card-flipped')){
+            xtag.skipTransition(this.firstElementChild, function() {
+              changeFlipDirection(this, value);
+            }, this);
+          }
+          else {
+            changeFlipDirection(this, value);
+          }
+        }
+      },
+      flipped: {
+        get: function() {
+          return xtag.hasClass(this, 'x-card-flipped');
         }
       }
     },
     methods: {
-      slideTo: function(index){
-        slide(this, index);
-      },
-      slideNext: function(){
-        var shift = getState(this);
-          shift[0]++;
-        slide(this, shift[0] > shift[1] ? 0 : shift[0]);
-      },
-      slidePrevious: function(){
-        var shift = getState(this);
-          shift[0]--;
-        slide(this, shift[0] < 0 ? shift[1] : shift[0]);
+      toggle: function() {
+        xtag.toggleClass(this, 'x-card-flipped');
       }
     }
   });
-  
-  xtag.register('x-slide', {
-    lifecycle:{
-      inserted: function(){
-        var ancestor = this.parentNode.parentNode;
-        if (ancestor.tagName.toLowerCase() == 'x-slidebox') init.call(ancestor, true);
-      }
-    },
-    events:{
-      'elementupgrade': function(e){
-        if (e.target == this){
-          var ancestor = this.parentNode.parentNode;
-          if (ancestor.tagName.toLowerCase() == 'x-slidebox') init.call(ancestor, true);
-        }
-      }
-    }
-  });
-  
+
+})();
+
+
+(function(){
+	
+	xtag.register('x-shiftbox', {			
+		events:{
+			'transitionend': function(e){
+				if (e.target == xtag.queryChildren(this, 'x-content')[0]){					
+					if (this.shift.length){
+						xtag.fireEvent(this, 'closed');
+					}
+					else {
+						xtag.fireEvent(this, 'opened');
+					}
+				}
+			}
+		},
+		accessors: {
+			'shift': {
+				get: function(){					
+					return this.getAttribute('shift') || '';
+				},
+				'set:attribute(shift)': function(shift){
+				}
+			}
+		}
+	});
+	
 })();
