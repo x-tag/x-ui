@@ -114,6 +114,11 @@
 					<x-toggle label="Radio 3" name="toggle-group-1"></x-toggle>
 				</div>
 
+				<x-ribbon><h4>X-Switch</h4></x-ribbon>
+				<div>
+					<x-switch onText="✔" offText=" "></x-switch>
+				</div>
+
 				<div></div>
 
 			</section>
@@ -127,10 +132,10 @@
 					<x-flipbox id="flipbox">
 						<img src="./images/meme-jquery.jpg" >
 						<div>
-							<h4>Why is X-Tags better?</h4>
+							<h4>Why is X-Tag better?</h4>
 							<ul>
-								<li>Instant instantiation</li>
-								<li>Sharable components</li>
+								<li>Instant Instantiation</li>
+								<li>Sharable Components</li>
 								<li>Accessors</li>
 								<li>Function Pseudo Chains</li>
 							<ul>
@@ -139,15 +144,36 @@
 					<button onclick="this.previousElementSibling.toggle()">Flip</button>
 				</div>
 
-				<x-ribbon><h4>Shiftbox</h4></x-ribbon>
+				<x-ribbon><h4>Shiftbox + AppBar</h4></x-ribbon>
 
 				<div>
 					<x-shiftbox id="shiftbox">
 						<aside>
-							under text menu
+							<x-input value="Search" data-loading><button data-clear>&#10799;</button></x-input>
+							<header>Calendar</header>
+							<ul>
+								<li>Today</li>
+								<li>Tomorrow</li>
+								<li>This Week</li>
+								<li>Next Week</li>
+							</ul>
+							<header>Shopping Lists</header>
+							<ul>
+								<li>Sprouts</li>
+								<li>Whole Foods</li>
+								<li>Lucky</li>
+								<li>BevMo</li>
+							</ul>
 						</aside>
 						<section>
-							main section
+							<x-appbar>
+						    <div id="toggleShift">=</div>
+						    <header>Daily Planner</header>
+						    <div>+</div>
+						  </x-appbar>
+						  <ul>
+						  	<li></li>
+						  </ul>
 						</section>
 					</x-shiftbox>
 					<button onclick="this.previousElementSibling.hasAttribute('open')?this.previousElementSibling.removeAttribute('open'):this.previousElementSibling.setAttribute('open','')">Shift</button>
@@ -160,5 +186,20 @@
 	</ul>
 
 </body>
+
+<script type="text/javascript">
+
+	document.addEventListener('DOMComponentsLoaded', function(){
+		var shiftbox = document.getElementById('shiftbox');
+		document.getElementById('toggleShift').addEventListener('click', function(){
+			if (shiftbox.hasAttribute('open')){
+				shiftbox.removeAttribute('open');
+			} else {
+				shiftbox.setAttribute('open','');
+			}
+		});
+	});
+
+</script>
 
 </html>
