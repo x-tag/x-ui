@@ -15,6 +15,7 @@
     "x-tag-flipbox": "*",
     "x-tag-shiftbox": "*",
     "x-tag-appbar": "*",
-    "x-tag-switch": "*"
+    "x-tag-switch": "*",
+    "x-tag-toggle": "*"
   }
 }
