@@ -10,17 +10,15 @@
 		<link rel="stylesheet" type="text/css" href="site.css"/>
 
 		<link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
-		<link rel="stylesheet" type="text/css" href="../x-ribbon/x-ribbon.css"/>
-		<link rel="stylesheet" type="text/css" href="../x-input/x-input.css"/>
-		<link rel="stylesheet" type="text/css" href="../x-toggle/x-toggle.css"/>
+		<link rel="stylesheet" type="text/css" href="/x-ribbon/x-ribbon.css"/>
+		<link rel="stylesheet" type="text/css" href="/x-input/x-input.css"/>
 
 		<link rel="stylesheet" type="text/css" href="elements.css"/>
 
 		<script type="text/javascript" src="x-tag-components.js"></script>
-		<script type="text/javascript" src="../x-input/x-input.js"></script>
-		<script type="text/javascript" src="../x-toggle/x-toggle.js"></script>
+		<script type="text/javascript" src="/x-input/x-input.js"></script>
 
-		<link rel="stylesheet" type="text/css" href="../src/light.css"/>
+		<link rel="stylesheet" type="text/css" href="/src/light.css"/>
 
 		<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet" type="text/css" />
 	</head>
@@ -176,7 +174,7 @@
 						  </ul>
 						</section>
 					</x-shiftbox>
-					<button onclick="this.previousElementSibling.hasAttribute('open')?this.previousElementSibling.removeAttribute('open'):this.previousElementSibling.setAttribute('open','')">Shift</button>
+					<button onclick="this.previousElementSibling.toggle()">Shift</button>
 				</div>
 
 			</section>
