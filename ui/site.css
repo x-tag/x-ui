@@ -28,26 +28,29 @@ body {
 	border-radius: 6px;
 	box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.25);
 }
-	
+
 	#element_groups > li {
 		width: 50%;
 		margin-bottom: 35px;
 	}
-	
+
 	#element_groups > li:first-child {
 		float: left;
 		margin-left: -15px;
 	}
-	
+
 	#element_groups > li:last-child {
 		float: right;
 		margin-right: -15px;
 	}
-	
+	#element_groups > li > section {
+		margin-bottom: 30px;
+	}
+
 	section > *:last-child {
 		margin-bottom: 15px;
 	}
-	
+
 	section > header {
 		padding: 3px 8px 5px;
 		color: #fff;
@@ -57,8 +60,8 @@ body {
 		text-shadow: 0 1px 1px rgba(0,0,0,0.4);
 		border-radius: 5px 5px 0 0;
 	}
-	
-	section > x-ribbon {	
+
+	section > x-ribbon {
 		margin-bottom: 20px;
 		margin-left: -8px;
 		padding: 2px 8px;
@@ -68,14 +71,15 @@ body {
 		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
 		box-shadow: 1px 1px 2px -1px rgba(0, 0, 0, 0.75);
 	}
-		
+
 		section > x-ribbon:after {
 			border-left-width: 7px;
 			border-top-width: 6px;
 		}
-	
+
 	section > div{
 		margin: 0 14px 10px;
+		clear: both;
 	}
 	
 		section > div:before {
@@ -88,7 +92,7 @@ body {
 
 
 /* Elements */
-	
+
 #header {
 	position: fixed;
 	top: 0;
@@ -115,22 +119,22 @@ body {
 	#nav_logo div, #nav_logo span {
 		display: inline-block;
 	}
-	
+
 	#nav_logo div {
 		position: relative;
 		top: -3px;
 		font-size: 29px;
 		margin: 0 -6px;
 	}
-	
+
 	#nav_logo div span {
 		font-weight: bold;
-		
+
 	}
 	#nav_logo div span span {
 		font-size: 23px;
 	}
-	
+
 #tagline {
 	margin: 0;
 	padding: 75px 0 35px;
@@ -139,7 +143,7 @@ body {
     text-shadow: 0 1px 0 #fff, 0 -1px 0 #bbb;
 	opacity: 0.5;
 }
-	
+
 /* Elements */
 
 #form_elements header {
@@ -162,13 +166,94 @@ body {
 	background: CornflowerBlue;
 }
 
+/* Structural */
+
+#structural_elements > header {
+	background: darkorange;
+}
+
+#flipbox, #shiftbox {
+	height: 240px;
+	width: 325px;
+	margin: 0 auto;
+}
+
+#flipbox > * {
+	border: solid 3px #ddd;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#flipbox > *:last-child {
+	padding: 15px;
+}
+
+#shiftbox {
+	border: solid 3px #ddd;
+}
+
+#shiftbox section {
+	border-radius: 0;
+}
+#shiftbox aside {
+	overflow: scroll;
+	width: 210px;
+	padding: 0px;
+	background-color: rgb(65, 65, 65);
+	color: rgb(255, 255, 255);
+	height: 100%;
+}
+
+#shiftbox aside header {
+	padding: 5px;
+	background-color: orange;
+}
+
+#shiftbox ul {
+	padding: 0px;
+}
+
+#shiftbox ul li{
+	list-style: none;
+}
+
+#shiftbox aside ul li {
+	padding: 3px;
+	border-bottom: solid 1px #666;
+	cursor: pointer;
+}
+
+#shiftbox section {
+	list-style: none;
+}
+
+#shiftbox[open] section {
+	margin-left: -129px;
+}
+
+x-appbar {
+	font: 1.5rem/2.4rem "MozTT",Sans-serif;
+	color: rgb(255, 255, 255);
+	background-color: orange;
+}
+
+x-appbar > div {
+  cursor: pointer;
+}
+
+x-appbar > *:before {
+  top: 3px;
+  bottom: 3px;
+}
+
 @media all and (max-width: 675px) {
-	
+
 	#element_groups > li {
 		float: none;
 		width: auto;
 		margin: 0 0 35px !important;
 	}
-	
+
 }
 

@@ -1,9 +1,9 @@
 {
-  "name": "stub",
+  "name": "x-ui",
   "description": "",
   "version": "0.1.0",
   "keywords": [
-    "web-components",    
+    "web-components",
     "x-tag"
   ],
   "main": [
@@ -12,6 +12,10 @@
   ],
   "dependencies": {
     "x-tag-core": "*",
-	"x-tag-slidebox": "*"
+    "x-tag-flipbox": "*",
+    "x-tag-shiftbox": "*",
+    "x-tag-appbar": "*",
+    "x-tag-switch": "*",
+    "x-tag-toggle": "*"
   }
 }

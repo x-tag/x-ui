@@ -19,13 +19,7 @@ module.exports = function(grunt) {
         tasks: ['stylus']
       }
     },*/
-    bumpup: ['component.json', 'package.json', 'xtag.json'],
-    tagrelease: {
-      file: 'package.json',
-      prefix: 'xtag-v',
-      commit: true
-    }, 
-    stylus:{     
+    stylus:{
       light: {
         options:{
           define: {
@@ -56,7 +50,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-smush-components');
 
   grunt.registerTask('build', ['smush-components','stylus']);
-  grunt.registerTask('bump:patch', ['bumpup:patch', 'tagrelease']);
 
 
 };
