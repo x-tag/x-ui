@@ -8,8 +8,8 @@ module.exports = function(grunt) {
     'smush-components': {
       options: {
         fileMap: {
-          js: 'ui/x-tag-components.js',
-          css: 'ui/x-tag-components.css'
+          js: 'ui/js/x-tag-components.js',
+          css: 'ui/css/x-tag-components.css'
         }
       }
     },
@@ -40,16 +40,43 @@ module.exports = function(grunt) {
           'src/dark.css': ['src/styl/main.styl']
         }
       }
+    },
+    concat: {
+      localComponentsJS: {
+        src: ['x-input/x-input.js','x-ribbon/x-ribbon.js'],
+        dest: 'ui/js/local-components.js'
+      },
+      localComponentsCSS: {
+        src: ['x-input/x-input.css','x-ribbon/x-ribbon.css'],
+        dest: 'ui/css/local-components.css'
+      },
+      lightTheme: {
+        src: ['src/light.css'],
+        dest: 'ui/css/light-theme.css'
+      },
+      darkTheme: {
+        src: ['src/dark.css'],
+        dest: 'ui/css/dark-theme.css'
+      }
+    },
+    copy: {
+      ui: {
+        files: [{expand: true, flatten: true, src: ['src/images/*'], dest: 'ui/images/' }]
+      }
     }
   });
 
 
   grunt.loadNpmTasks('grunt-contrib-stylus');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-bumpup');
   grunt.loadNpmTasks('grunt-tagrelease');
   grunt.loadNpmTasks('grunt-smush-components');
 
-  grunt.registerTask('build', ['smush-components','stylus']);
+  grunt.registerTask('build', ['smush-components','concat:localComponentsJS','concat:localComponentsCSS']);
+  grunt.registerTask('build-light', ['stylus:light','concat:lightTheme']);
+  grunt.registerTask('build-dark', ['stylus:dark','concat:darkTheme']);
 
 
 };

@@ -11,7 +11,7 @@ header, h1, h2, h3, h4, button {
 	font-family: Noto Sans;
 	font-size: 100%;
 	font-weight: 700;
-} 
+}
 
 
 /* Headings */
@@ -213,7 +213,7 @@ button {
 
 	button:hover, button:focus {
 		background-color: #555;
-	} 
+	}
 
 	button:hover:active {
 		-webkit-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 -1px 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 1px 0 rgba(0, 0, 0, 0.35) inset;
@@ -229,7 +229,7 @@ button.confirm {
 
 	button.confirm:hover, button.confirm:focus {
 		background-color: #00AA47;
-	} 
+	}
 
 button.cancel {
 	background-color: #D31313 ;
@@ -237,7 +237,7 @@ button.cancel {
 
 	button.cancel:hover, button.cancel:focus {
 		background-color: #E02F2F;
-	} 
+	}
 
 button[disabled], button[disabled]:hover, button[disabled]:hover:active {
 	color: #999999;
