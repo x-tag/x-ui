@@ -578,13 +578,13 @@
       var duration = prefix.js + 'TransitionDuration';
       element.style[duration] = '0.001s';
       element.style.transitionDuration = '0.001s';
-      if (fn) fn.call(bind);
-      var callback = function(){
-        element.style[duration] = '';
-        element.style.transitionDuration = '';
-        xtag.removeEvent(element, 'transitionend', callback);
-      };
-      xtag.addEvent(element, 'transitionend', callback);
+      xtag.requestFrame(function(){
+        if (fn) fn.call(bind);
+        xtag.requestFrame(function(){
+          element.style[duration] = '';
+          element.style.transitionDuration = '';
+        });
+      });
     },
 
     requestFrame: (function(){
@@ -843,11 +843,12 @@
       direction: {
         attribute: {},
         set: function(value) {
-          if (this.flipped){
-            xtag.skipTransition(this.firstElementChild, function() {
-              this.setAttribute('direction', value);
-            }, this);
-          }
+          xtag.skipTransition(this.firstElementChild, function() {
+            this.setAttribute('direction', value);
+          }, this);
+          xtag.skipTransition(this.lastElementChild, function() {
+            this.setAttribute('direction', value);
+          }, this);
         }
       },
       flipped: {
@@ -999,6 +1000,22 @@
   }
   
   var shifted = false;
+  function updateGroup(toggle, event){
+    if ((shifted || (event.touches && event.touches.length)) && toggle.group && toggle.firstChild.type != 'radio') {
+      var active = toggle.xtag.scope.querySelector('x-toggle[group="'+ toggle.group +'"][active]');
+      if (active && toggle != active) {
+        var self = toggle,
+            state = active.checked,
+            toggles = toggle.groupToggles,
+            index = toggles.indexOf(toggle),
+            activeIndex = toggles.indexOf(active);
+        toggles.slice(Math.min(index, activeIndex), Math.max(index, activeIndex)).forEach(function(el){
+          if (el != self) el.checked = state;
+        });
+      }
+    }
+  }
+  
   xtag.addEvents(document, {
     'DOMComponentsLoaded': function(){
       updateScope(document);
@@ -1013,32 +1030,21 @@
     },
     'keyup': function(e){
       shifted = e.shiftKey;
+      if (e.keyCode == 32 && e.target.parentNode.nodeName == 'X-TOGGLE') updateGroup(e.target.parentNode, e);
     },
-    'focus:delegate(x-toggle)': function(e){
+    'focus:delegate(x-toggle)': function(){
       this.setAttribute('focus', '');
     },
-    'blur:delegate(x-toggle)': function(e){
+    'blur:delegate(x-toggle)': function(){
       this.removeAttribute('focus');
     },
-    'tap:delegate(x-toggle)': function(e){
-      if (shifted && this.group) {
-        var toggles = this.groupToggles,
-            active = this.xtag.scope.querySelector('x-toggle[group="'+ this.group +'"][active]');
-        if (active && this != active) {
-          var self = this,
-              state = active.checked,
-              index = toggles.indexOf(this),
-              activeIndex = toggles.indexOf(active);
-          toggles.slice(Math.min(index, activeIndex), Math.max(index, activeIndex)).forEach(function(toggler){
-            if (toggler != self) toggler.checked = state;
-          });
-        }
-      }
+    'tapend:delegate(x-toggle)': function(e){
+      updateGroup(this, e);
     },
     'change:delegate(x-toggle)': function(e){
       var active = this.xtag.scope.querySelector('x-toggle[group="'+ this.group +'"][active]');
       this.checked = (shifted && active && (this != active)) ? active.checked : this.firstChild.checked;
-      if (this.group) {
+      if (this.group && this.firstChild.type != 'radio') {
         this.groupToggles.forEach(function(toggle){
           toggle.active = false;
         });
