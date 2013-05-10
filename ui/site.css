@@ -77,6 +77,13 @@ body {
 	section > div{
 		margin: 0 14px 10px;
 	}
+	
+		section > div:before {
+			clear: both;
+			content: " ";
+			display: block;
+			overflow: hidden;
+		}
 
 
 
@@ -145,6 +152,10 @@ body {
 
 #form_elements input[type="text"] {
 	margin: 0 0 12px;
+}
+
+#form_elements x-toggle[group="checks-1"] {
+	display: block;
 }
 
 #text_styles header {
