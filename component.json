@@ -14,8 +14,9 @@
     "x-tag-core": "*",
     "x-tag-flipbox": "*",
     "x-tag-shiftbox": "*",
-    "x-tag-appbar": "*",
     "x-tag-switch": "*",
-    "x-tag-toggle": "*"
+    "x-tag-toggle": "*",
+	"x-tag-input": "*",
+	"x-tag-spinner": "*"
   }
 }

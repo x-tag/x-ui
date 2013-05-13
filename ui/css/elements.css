@@ -5,27 +5,9 @@
 
 /* Font Settings */
 
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Noto Sans'), local('NotoSans'), url(http://themes.googleusercontent.com/static/fonts/notosans/v1/LeFlHvsZjXu2c3ZRgBq9nLO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Noto Sans Bold'), local('NotoSans-Bold'), url(http://themes.googleusercontent.com/static/fonts/notosans/v1/PIbvSEyHEdL91QLOQRnZ16RDOzjiPcYnFooOUGCOsRk.woff) format('woff');
-}
-@font-face {
-  font-family: 'Noto Sans';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Noto Sans Italic'), local('NotoSans-Italic'), url(http://themes.googleusercontent.com/static/fonts/notosans/v1/ByLA_FLEa-16SpQuTcQn4LrIa-7acMAeDBVuclsi6Gc.woff) format('woff');
-}
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,400italic,700);
 
-
-header, h1, h2, h3, h4, button {
+header, h1, h2, h3, h4, h5, h6, button {
 	font-family: Noto Sans;
 	font-size: 100%;
 	font-weight: 700;
@@ -36,22 +18,27 @@ header, h1, h2, h3, h4, button {
 
 h1 {
 	font-size: 225%;
-	margin: 20px 0 10px;
+	margin: 16px 0 14px;
 }
 
 h2 {
 	font-size: 165%;
-	margin: 16px 0 8px;
+	margin: 14px 0 12px;
 }
 
 h3 {
 	font-size: 135%;
-	margin: 12px 0 6px;
+	margin: 12px 0 10px;
 }
 
 h4 {
 	font-size: 115%;
-	margin: 8px 0 4px;
+	margin: 10px 0 8px;
+}
+
+h5 {
+	font-size: 105%;
+	margin: 8px 0 6px;
 }
 
 blockquote {
@@ -143,6 +130,7 @@ input, button {
 input[type="text"] {
 	display: inline-block;
 	padding: 4px 4px 5px;
+	outline: none;
 }
 
 input[type="text"], x-input {
@@ -162,14 +150,6 @@ input[type="text"], x-input {
 	-moz-transition: border 0.3s 0s ease;
 	-ms-transition: border 0.3s 0s ease;
 	transition: border 0.3s 0s ease;
-}
-
-x-input *:not(input), x-input *:not(input):hover, x-input *:not(input):focus {
-	background: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	-ms-box-shadow: none;
-	box-shadow: none;
 }
 
 input[type="text"]:hover, x-input:hover {
@@ -205,35 +185,39 @@ input[type="radio"] {
 	border: 1px solid;
 }
 
-button {
-	padding: 4px 6px;
-	border: none;
-	color: #fff;
-	background-image: -webkit-linear-gradient(top, rgba(255,255,255, 0.15), rgba(255,255,255, 0));
-	background-image: -moz-linear-gradient(top, rgba(255,255,255, 0.15), rgba(255,255,255, 0));
-	background-image: -ms-linear-gradient(top, rgba(255,255,255, 0.15), rgba(255,255,255, 0));
-	background-image: linear-gradient(top, rgba(255,255,255, 0.15), rgba(255,255,255, 0));
-	background-color: #444;
-	-webkit-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 2px 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 1px -1px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 2px 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 1px -1px rgba(0, 0, 0, 0.4);
-	-ms-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 2px 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 1px -1px rgba(0, 0, 0, 0.4);
-	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 2px 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 1px -1px rgba(0, 0, 0, 0.4);
+button, menu.buttons {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	-ms-border-radius: 3px;
 	border-radius: 3px;
-	-webkit-transition: background-color 0.3s 0s ease;
-	-moz-transition: background-color 0.3s 0s ease;
-	-ms-transition: background-color 0.3s 0s ease;
-	transition: background-color 0.3s 0s ease;
+}
+
+button {
+	padding: 4px 6px;
+	border: none;
+	color: #fff;
+	background-image: -webkit-linear-gradient(top, rgba(255,255,255, 0.2), rgba(255,255,255, 0));
+	background-image: -moz-linear-gradient(top, rgba(255,255,255, 0.2), rgba(255,255,255, 0));
+	background-image: -ms-linear-gradient(top, rgba(255,255,255, 0.2), rgba(255,255,255, 0));
+	background-image: linear-gradient(top, rgba(255,255,255, 0.2), rgba(255,255,255, 0));
+	background-color: #5f5f5f;
+	-webkit-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 1px 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 0 rgba(0, 0, 0, 0.220);
+	-moz-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 1px 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 0 rgba(0, 0, 0, 0.220);
+	-ms-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 1px 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 0 rgba(0, 0, 0, 0.220);
+	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 1px 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 0 0 rgba(0, 0, 0, 0.220);
+	-webkit-transition: background-color 0.2s 0s ease;
+	-moz-transition: background-color 0.2s 0s ease;
+	-ms-transition: background-color 0.2s 0s ease;
+	transition: background-color 0.2s 0s ease;
 	cursor: pointer;
 }
 
 	button:hover, button:focus {
-		background-color: #555;
+		background-color: #707070;
 	}
 
-	button:hover:active {
+	button[pressed] {
+		background-color: #5f5f5f;
 		-webkit-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 -1px 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 1px 0 rgba(0, 0, 0, 0.35) inset;
 		-moz-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 -1px 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 1px 0 rgba(0, 0, 0, 0.35) inset;
 		-ms-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.7) inset, 0 -1px 1px 0 rgba(255, 255, 255, 0.25) inset, 0 1px 1px 0 rgba(0, 0, 0, 0.35) inset;
@@ -245,7 +229,7 @@ button.confirm {
 	background-color: #3D9E68;
 }
 
-	button.confirm:hover, button.confirm:focus {
+	button.confirm:not([pressed]):hover, button.confirm:not([pressed]):focus {
 		background-color: #00AA47;
 	}
 
@@ -253,11 +237,11 @@ button.cancel {
 	background-color: #D31313 ;
 }
 
-	button.cancel:hover, button.cancel:focus {
+	button.cancel:not([pressed]):hover, button.cancel:not([pressed]):focus {
 		background-color: #E02F2F;
 	}
 
-button[disabled], button[disabled]:hover, button[disabled]:hover:active {
+button[disabled], button[disabled]:hover, button[disabled][pressed] {
 	color: #999999;
 	background: #ddd;
 	-webkit-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5) inset;
@@ -267,7 +251,75 @@ button[disabled], button[disabled]:hover, button[disabled]:hover:active {
 	cursor: default;
 }
 
-/* Ribbon */
+menu.buttons {
+	margin: 0;
+	padding: 0;
+	display: table;
+}
+	menu.buttons > button {
+		display: table-cell;
+		margin: 0;
+		-webkit-border-radius: 0;
+		-moz-border-radius: 0;
+		-ms-border-radius: 0;
+		border-radius: 0;
+	}
+	
+	menu.buttons > button:first-child {
+		-webkit-border-radius: inherit;
+		-moz-border-radius: inherit;
+		-ms-border-radius: inherit;
+		border-radius: inherit;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	
+	menu.buttons > button:last-child {
+		-webkit-border-radius: inherit;
+		-moz-border-radius: inherit;
+		-ms-border-radius: inherit;
+		border-radius: inherit;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+	
+	menu.buttons > button:first-child:last-child {
+		-webkit-border-radius: inherit;
+		-moz-border-radius: inherit;
+		-ms-border-radius: inherit;
+		border-radius: inherit;
+	}
+	
+	
+/* X-SWITCH */
+
+x-switch {
+	-webkit-border-radius: 100px;
+	-moz-border-radius: 100px;
+	-ms-border-radius: 100px;
+	border-radius: 100px;
+}
+
+.x-switch-text {
+	padding: 2px 8px;
+}
+
+.x-switch-knob {
+	
+	background: -webkit-linear-gradient(top, #f0f0f0, #aaa);
+	background: -moz-linear-gradient(top, #f0f0f0, #aaa);
+	background: -ms-linear-gradient(top, #f0f0f0, #aaa);
+	background: -o-linear-gradient(top, #f0f0f0, #aaa);
+	background: linear-gradient(top, #f0f0f0, #aaa);
+	-webkit-box-shadow: 0 1px 3px 0px rgba(0,0,0,0.7);
+	-moz-box-shadow: 0 1px 3px 0px rgba(0,0,0,0.7);
+	-ms-box-shadow: 0 1px 3px 0px rgba(0,0,0,0.7);
+	box-shadow: 0 1px 3px 0px rgba(0,0,0,0.7);
+	-webkit-border-radius: 100px;
+	-moz-border-radius: 100px;
+	-ms-border-radius: 100px;
+	border-radius: 100px;
+}
 
 
 

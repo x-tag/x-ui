@@ -42,14 +42,6 @@ module.exports = function(grunt) {
       }
     },
     concat: {
-      localComponentsJS: {
-        src: ['x-input/x-input.js','x-ribbon/x-ribbon.js'],
-        dest: 'ui/js/local-components.js'
-      },
-      localComponentsCSS: {
-        src: ['x-input/x-input.css','x-ribbon/x-ribbon.css'],
-        dest: 'ui/css/local-components.css'
-      },
       lightTheme: {
         src: ['src/light.css'],
         dest: 'ui/css/light-theme.css'
@@ -74,7 +66,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-tagrelease');
   grunt.loadNpmTasks('grunt-smush-components');
 
-  grunt.registerTask('build', ['smush-components','concat:localComponentsJS','concat:localComponentsCSS']);
+  grunt.registerTask('build', ['smush-components']);
   grunt.registerTask('build-light', ['stylus:light','concat:lightTheme']);
   grunt.registerTask('build-dark', ['stylus:dark','concat:darkTheme']);
 

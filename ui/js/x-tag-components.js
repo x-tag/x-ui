@@ -864,6 +864,112 @@
 
 })();
 
+(function(){
+  
+  xtag.register('x-input', {
+    lifecycle: {
+      created: function(){
+        var input = this.xtag.input = this.appendChild(document.createElement('input'));
+        input.className = 'x-input-text';
+      }
+    },
+    methods: {
+      focus: function(){
+        this.xtag.input.focus();
+      },
+      blur: function(){
+        this.xtag.input.blur();
+      },
+      clear: function(){
+        this.value = '';
+        this.xtag.input.focus();
+        this.removeAttribute('loading');
+        xtag.fireEvent(this, 'clear');
+        xtag.fireEvent(this.xtag.input, 'change');
+      }
+    },
+    events:{
+      'focus:delegate(.x-input-text)': function(e){
+        this.parentNode.setAttribute('focus', '');
+      },
+      'blur:delegate(.x-input-text)': function(e){
+        this.parentNode.removeAttribute('focus');
+      },
+      'tap:delegate([input-clear])': function(e){
+        this.parentNode.clear();
+      },
+      'change:delegate(.x-input-text)': function(e){
+        this.parentNode.value = this.value;
+      },
+      'keypress': function(e){
+        switch(e.keyCode) {
+          case 13:
+            if (this.autospin) {
+              
+            }
+            break;
+          case 27:
+            this.clear();
+            break;
+        }
+      }
+    },
+    accessors: {
+      autospin: {
+        attribute: { boolean: true }
+      },
+      loading: {
+        attribute: { boolean: true }
+      },
+      name: {
+        attribute: { property: 'input' }
+      },
+      maxlength: {
+        attribute: { property: 'input' }
+      },
+      placeholder: {
+        attribute: { property: 'input' }
+      },
+      autofocus: {
+        attribute: {
+          boolean: true,
+          property: 'input'
+        },
+        set: function(){
+          this.xtag.input.focus();
+        }
+      },
+      autocomplete: {
+        attribute: {
+          boolean: true,
+          property: 'input'
+        }
+      },
+      minChar: {
+        attribute: {},
+        set: function(value){
+          this.setAttribute('min-char', this.xtag.minChar = Number(value) || 0);
+        }
+      },
+      value: {
+        attribute: {},
+        get: function(){
+          return this.xtag.input.value;
+        },
+        set: function(value){
+          this.xtag.input.value = value;
+        }
+      },
+      controlElements: {
+        writeable: false,
+        get: function(){
+          return xtag.queryChildren(this, '*:not(input)');
+        }
+      }
+    }
+  });
+
+})();
 
 (function(){
 
@@ -900,6 +1006,82 @@
 	});
 
 })();
+(function(){
+
+  function updateSize(el) {
+    var oWidth = el.offsetWidth;
+    el.xtag.img.style.borderWidth = oWidth * .1 + 'px';
+    el.xtag.textEl.style.lineHeight = oWidth + 'px';
+    el.style.fontSize = oWidth + 'px';
+  }
+
+  var emptyGif = 'data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+
+  xtag.register('x-spinner', {
+    lifecycle: {
+      created: function(){
+        this.xtag.textEl = document.createElement('b');
+        this.xtag.img = document.createElement('img');
+        this.xtag.img.src = emptyGif;
+        this.appendChild(this.xtag.textEl);
+        this.appendChild(this.xtag.img);
+        updateSize(this);
+      },
+      inserted: function() {
+        updateSize(this);
+      }
+    },
+    methods: {
+      toggle: function(){
+        this.paused = this.paused ? false : true;
+      }
+    },
+    accessors: {
+      paused: {
+        attribute: { boolean: true }
+      },
+      label: {
+        attribute: {},
+        set: function(text) {
+          this.xtag.textEl.innerHTML = text;
+        }
+      },
+      duration: {
+        attribute: {},
+        set: function(duration) {
+          var val = (+duration || 1) + 's';
+          this.xtag.img.style[xtag.prefix.js + 'AnimationDuration'] = val;
+          this.xtag.img.style.animationDuration = val;
+        },
+        get: function() {
+          return +this.getAttribute('duration');
+        }
+      },
+      reverse: {
+        attribute: {
+          boolean: true
+        },
+        set: function(val) {
+          val = val ? 'reverse' : 'normal';
+          this.xtag.img.style[xtag.prefix.js + 'AnimationDirection'] = val;
+          this.xtag.img.style.animationDirection = val;
+        }
+      },
+      src: {
+        attribute: {
+          property: 'img'
+        },
+        set: function(src) {
+          if (!src) {
+            this.xtag.img.src = emptyGif;
+          }
+        }
+      }
+    }
+  });
+
+})();
+
 (function(){
 
   var template =  '<input type="checkbox" />' +
@@ -1046,9 +1228,9 @@
       this.checked = (shifted && active && (this != active)) ? active.checked : this.firstChild.checked;
       if (this.group && this.firstChild.type != 'radio') {
         this.groupToggles.forEach(function(toggle){
-          toggle.active = false;
+          toggle.removeAttribute('active');
         });
-        this.active = true;
+        this.setAttribute('active', '');
       }
     }
   });  
@@ -1073,7 +1255,6 @@
     },
     accessors: {
       label: { attribute: {} },
-      active: { attribute: { boolean: true } },
       group: { attribute: {} },
       groupToggles: {
         get: function(){
