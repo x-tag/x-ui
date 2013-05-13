@@ -201,6 +201,10 @@ body {
 	background: darkorange;
 }
 
+#structural_elements x-flipbox {
+	width: 89%;
+}
+
 #flipbox, #shiftbox {
 	height: 240px;
 	width: 325px;
