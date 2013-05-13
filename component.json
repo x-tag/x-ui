@@ -14,9 +14,11 @@
     "x-tag-core": "*",
     "x-tag-flipbox": "*",
     "x-tag-shiftbox": "*",
+    "x-tag-slidebox": "*",
     "x-tag-switch": "*",
     "x-tag-toggle": "*",
-	"x-tag-input": "*",
-	"x-tag-spinner": "*"
+    "x-tag-input": "*",
+    "x-tag-spinner": "*",
+    "x-tag-leaflet-map": "*"
   }
 }

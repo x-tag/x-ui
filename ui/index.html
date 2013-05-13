@@ -10,9 +10,9 @@
 		<link rel="stylesheet" type="text/css" href="css/x-tag-components.css"/>
 		<link rel="stylesheet" type="text/css" href="x-ribbon/x-ribbon.css"/>
 		<link rel="stylesheet" type="text/css" href="css/elements.css"/>
-		
+
 		<link rel="stylesheet" type="text/css" href="css/site.css"/>
-		
+
 		<script type="text/javascript" src="js/x-tag-components.js"></script>
 		<script type="text/javascript" src="js/x-ui.js"></script>
 
@@ -56,7 +56,7 @@
 
 				<x-ribbon><h4>Text Content</h4></x-ribbon>
 				<div>
-					<p>How long can we maintain? I wonder. How long before one of us starts raving and jabbering at this boy? What will he think then? 
+					<p>How long can we maintain? I wonder. How long before one of us starts raving and jabbering at this boy? What will he think then?
 					This same lonely desert was the last known home of the Manson family. Will he make that grim connection...</p>
 					<p>No point mentioning those <a href="http://en.wikipedia.org/wiki/Bat">bats</a>, I thought. The poor bastard will see them soon enough.
 					The car suddenly veered off the road and we came to a sliding halt in the gravel. I was hurled against the dashboard.
@@ -65,7 +65,7 @@
 				</div>
 
 			</section>
-			
+
 			<section id="indicator_elements">
 				<header>Indicator Elements</header>
 
@@ -78,7 +78,18 @@
 					</menu>
 				</div>
 			</section>
-			
+
+			<section id="media_elements">
+				<header>Media Elements</header>
+
+				<x-ribbon><h4>Leaflet Maps</h4></x-ribbon>
+
+				<div>
+					<x-map id="leaflet-map" data-key="39d2b66f0d5d49dbb52a5b7ad87aea9b"></x-map>
+				</div>
+
+			</section>
+
 		</li>
 
 		<li>
@@ -93,7 +104,7 @@
 					<button class="confirm" tabindex="0">Confirm</button>
 					<button class="cancel">Cancel</button>
 					<button disabled>Disabled</button>
-					
+
 					<h5>Button Menu</h5>
 					<menu class="buttons">
 						<button>Copy</button>
@@ -117,7 +128,7 @@
 					<h4>X-Input</h4>
 					<x-input id="x-input-demo" placeholder="Slicker than your average input ;)" name="foo">
 						<div input-spinner></div><button input-clear>&#10799;</button><button>&#63;</button>
-					</x-input>	
+					</x-input>
 				</div>
 
 				<x-ribbon><h4>X-Toggle</h4></x-ribbon>
@@ -149,9 +160,9 @@
 
 				<div>
 					<x-flipbox id="flipbox">
-						<img src="./images/meme-jquery.jpg" >
+						<img src="./images/webcomponents.png" >
 						<div>
-							<h4>Why is X-Tag better?</h4>
+							<h4>X-Tag Web Components</h4>
 							<ul>
 								<li>Instant Instantiation</li>
 								<li>Sharable Components</li>
@@ -163,6 +174,15 @@
 					<menu class="buttons centered-buttons">
 						<button id="toggle_flipbox">Flip</button>
 						<button id="flipbox_direction">Direction: left</button>
+					</menu>
+				</div>
+
+				<x-ribbon><h4>Modal</h4></x-ribbon>
+
+				<div>
+					<x-modal id="modal" hidden overlay></x-modal>
+					<menu class="buttons centered-buttons">
+						<button id="toggle_modal">Show Modal</button>
 					</menu>
 				</div>
 
@@ -206,22 +226,24 @@
 
 	</ul>
 
+
 </body>
 
 <script type="text/javascript">
 
 	document.addEventListener('DOMComponentsLoaded', function(){
-	
-		var $ = function(id){ return document.getElementById(id) };
-		
+
+		// shortcut
+		var getById = function(id){ return document.getElementById(id) };
+
 		/*
-		var shiftbox = $('shiftbox');
+		var shiftbox = getById('shiftbox');
 		document.getElementById('toggleShift').addEventListener('click', function(){
 			if (shiftbox.hasAttribute('open')) shiftbox.removeAttribute('open');
 			else shiftbox.setAttribute('open','');
 		});
 		*/
-		
+
 		var inputTimeout = null,
 			directions = ['up', 'down', 'left', 'right'];
 		xtag.addEvents(document, {
@@ -234,20 +256,25 @@
 				}, 3000)
 			},
 			'tap:delegate(#toggle_flipbox)': function(){
-				$('flipbox').toggle();
+				getById('flipbox').toggle();
 			},
 			'tap:delegate(#flipbox_direction)': function(){
-				var flip = $('flipbox'),
+				var flip = getById('flipbox'),
 					num = directions.indexOf(flip.direction || 'left') + 1,
 					dir = directions[num == 4 ? 0 : num];
 				this.innerHTML = 'Direction: ' + dir;
 				flip.direction = dir
 			},
 			'tap:delegate(#toggle_spinner)':function(){
-				$('spinner').toggle();
+				getById('spinner').toggle();
+			},
+			'tap:delegate(#toggle_modal)': function(){
+				var modal = getById('modal');
+				modal.innerHTML = '<header>Modal Header</header><p>Modal Content</p><menu class="buttons centered-buttons"><button onclick="this.parentElement.parentElement.toggle()">Close</button></menu>';
+				modal.toggle();
 			}
 		});
-		
+
 	});
 
 </script>
