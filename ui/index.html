@@ -270,7 +270,7 @@
 			},
 			'tap:delegate(#toggle_modal)': function(){
 				var modal = getById('modal');
-				modal.innerHTML = '<header>Modal Header</header><p>Modal Content</p><menu class="buttons centered-buttons"><button onclick="this.parentElement.parentElement.toggle()">Close</button></menu>';
+				modal.innerHTML = '<header class="modal-header">Modal Header</header><p>Modal Content</p><menu class="buttons centered-buttons"><button onclick="this.parentElement.parentElement.toggle()">Close</button></menu>';
 				modal.toggle();
 			}
 		});
