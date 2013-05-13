@@ -266,6 +266,10 @@ body {
 	margin-left: -129px;
 }
 
+#media_elements header {
+	background-color: gold;
+}
+
 x-appbar {
 	font: 1.5rem/2.4rem "MozTT",Sans-serif;
 	color: rgb(255, 255, 255);
