@@ -262,8 +262,9 @@
 				var flip = getById('flipbox'),
 					num = directions.indexOf(flip.direction || 'left') + 1,
 					dir = directions[num == 4 ? 0 : num];
+
 				this.innerHTML = 'Direction: ' + dir;
-				flip.direction = dir
+				flip.direction = dir;
 			},
 			'tap:delegate(#toggle_spinner)':function(){
 				getById('spinner').toggle();
