@@ -6,3 +6,6 @@ framework:
 
 processes:
   web: node app.js
+
+url:
+  - x-ui.x-tags.org
