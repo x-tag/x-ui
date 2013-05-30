@@ -1,0 +1,8 @@
+name: x-ui
+
+framework:
+  type: node
+  runtime: node08
+
+processes:
+  web: node app.js
